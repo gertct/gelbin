@@ -1,6 +1,7 @@
 from typing import Dict, List
 
 import streamlit as st
+from streamlit_float import float_parent, float_init
 
 from questions import QuestionType, questions, Question
 
@@ -8,6 +9,8 @@ st.set_page_config(page_title="Gelbin Test", layout="wide")
 
 if "completed_sections" not in st.session_state:
     st.session_state.completed_sections = []
+
+float_init()
 
 
 class Section:
@@ -154,3 +157,4 @@ with data_col:
     completed_sections = st.session_state.completed_sections
     for section in completed_sections:
         st.write(f"✅ Section {section} completed")
+    float_parent()
