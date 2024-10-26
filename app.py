@@ -76,9 +76,10 @@ if st.button("Start Over"):
     st.session_state.completed_sections = []
 
 
-def quiz_section(section_number):
-    with st.expander(f"Section {section_number}"):
-        section = Section(section_number)
+def quiz_section(section_number, expanded=False):
+    section = Section(section_number)
+    with st.expander(f"Section {section_number}", expanded=expanded):
+
         total_points = section.allowed_points
 
         total_points = questions_section(section, total_points)
@@ -146,13 +147,15 @@ def disabled_on_complete_setting(section):
 
 quiz_section_col, data_col = st.columns([4, 2])
 with quiz_section_col:
-    quiz_section(1)
-    quiz_section(2)
-    quiz_section(3)
-    quiz_section(4)
-    quiz_section(5)
-    quiz_section(6)
-    quiz_section(7)
+    uncompleted_sections = [
+        section
+        for section in range(1, 8)
+        if section not in st.session_state.completed_sections
+    ]
+    min_uncompleted_section = min(uncompleted_sections, default=None)
+    for section in range(1, 8):
+        quiz_section(section, expanded=section == min_uncompleted_section)
+
 with data_col:
     float_parent()
     completed_sections = st.session_state.completed_sections
