@@ -6,6 +6,9 @@ import streamlit as st
 from attr import dataclass
 from questions import QuestionType, questions, Question
 
+if st.button("Start Over"):
+    st.session_state.total_points = {category: 0 for category in QuestionType.__members__}
+
 class Section:
     def __init__(self, number: int):
         self.number = number
@@ -61,28 +64,41 @@ class Section:
         }
         
 
-    
-section_1 = Section(1)
-st.write(section_1)
-total_points = section_1.allowed_points
+def quiz_section(section_number):
+    section = Section(section_number)
+    st.write(section)
+    total_points = section.allowed_points
 
-for question in section_1.questions:
-    number = st.number_input(question.text, min_value=0, max_value=10, value=0, step=1)
-    category = section_1.return_question_category(question)
-    section_1.add_points_to_category(category, number)
-    total_points -= number
+    for question in section.questions:
+        number = st.number_input(question.text, min_value=0, max_value=10, value=0, step=1, key=f"{section}{question.text}")
+        category = section.return_question_category(question)
+        section.add_points_to_category(category, number)
+        total_points -= number
 
-st.write(f"Total points left to distribute: {total_points}")
-if total_points > 0:
-    st.info("You have not used all your points")
-elif total_points < 0:
-    st.error("You have used too many points")
-else:
-    st.success("You have used all your points")
-    if st.button("Next section"):
-        categories_points = section_1.return_all_categories_points()
+    st.write(f"Total points left to distribute: {total_points}")
+    if total_points > 0:
+        st.info("You have not used all your points")
+    elif total_points < 0:
+        st.error("You have used too many points")
+    else:
+        st.success("You have used all your points")
+        if st.button("Next section", key=f"section_{section_number}"):
+            categories_points = section.return_all_categories_points()
+            st.write(categories_points)
 
-        st.write(categories_points)
+            if 'total_points' not in st.session_state:
+                st.session_state.total_points = {category: 0 for category in categories_points}
 
+            for category, points in categories_points.items():
+                st.session_state.total_points[category] += points
 
+            st.write("Accumulated total points:")
+            st.write(st.session_state.total_points)
 
+quiz_section(1)
+quiz_section(2)
+quiz_section(3)
+quiz_section(4)
+quiz_section(5)
+quiz_section(6)
+quiz_section(7)
