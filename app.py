@@ -44,14 +44,30 @@ class Section:
 
     def get_one_question_from_each_type(self, index: int = 0) -> List[Question]:
         question_list = [question_list[index] for question_list in questions.values()]
-        random.shuffle(question_list)
         return question_list
     
     def remove_points(self, points: int):
         self.points -= points
+
+    def add_points(self, points: int):
+        self.points += points
+
     
 section_1 = Section(1)
+st.write(section_1)
+total_points = section_1.points
+st.write(f"Total points: {total_points}")
 
-st.write(section_1.questions, section_1.points, section_1)
+for question in section_1.questions:
+    number = st.number_input(question.text, min_value=0, max_value=10, value=0, step=1)
+    total_points -= number
+
+st.write(f"Total points: {total_points}")
+if total_points <= 0:
+    st.success("You have used all your points")
+    st.button("Next section")
+else:
+    st.info("You have not used all your points")
+
 
 

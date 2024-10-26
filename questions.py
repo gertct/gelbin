@@ -15,7 +15,7 @@ class QuestionType(Enum):
 
 @dataclass
 class Question:
-    question: str
+    text: str
     category: QuestionType
 
 questions = {
