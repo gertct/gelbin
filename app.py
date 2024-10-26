@@ -91,9 +91,9 @@ def quiz_section(section_number):
             st.error("You have used too many points")
         else:
             st.success("You have used all your points")
-            if st.button("Next section", key=f"section_{section_number}"):
+            if st.button("Mark Completed", key=f"section_{section_number}"):
+                st.toast(f"Section {section_number} marked as completed", icon="✅")
                 categories_points = section.return_all_categories_points()
-                st.write(categories_points)
 
                 if "total_points" not in st.session_state:
                     st.session_state.total_points = {
