@@ -154,7 +154,24 @@ with quiz_section_col:
     quiz_section(6)
     quiz_section(7)
 with data_col:
+    float_parent()
     completed_sections = st.session_state.completed_sections
     for section in completed_sections:
         st.write(f"✅ Section {section} completed")
-    float_parent()
+    if len(completed_sections) == 7:
+        st.divider()
+        st.write("All sections completed")
+
+        st.write("Total points:")
+        sorted_points = sorted(st.session_state.total_points.values(), reverse=True)
+        top_two_points = sorted_points[:2]
+
+        top_roles = [
+            role
+            for role, points in st.session_state.total_points.items()
+            if points in top_two_points
+        ]
+
+        st.write("Your tops roles and their points:")
+        for role in top_roles:
+            st.write(f"{role}: {st.session_state.total_points[role]}")
