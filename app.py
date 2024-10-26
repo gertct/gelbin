@@ -56,18 +56,18 @@ class Section:
 section_1 = Section(1)
 st.write(section_1)
 total_points = section_1.points
-st.write(f"Total points: {total_points}")
 
 for question in section_1.questions:
     number = st.number_input(question.text, min_value=0, max_value=10, value=0, step=1)
     total_points -= number
 
-st.write(f"Total points: {total_points}")
-if total_points <= 0:
+st.write(f"Total points left to distribute: {total_points}")
+if total_points > 0:
+    st.info("You have not used all your points")
+elif total_points < 0:
+    st.error("You have used too many points")
+else:
     st.success("You have used all your points")
     st.button("Next section")
-else:
-    st.info("You have not used all your points")
-
 
 
