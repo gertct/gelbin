@@ -8,6 +8,7 @@ if st.button("Start Over"):
     st.session_state.total_points = {
         category: 0 for category in QuestionType.__members__
     }
+    st.session_state.completed_sections = []
 
 
 class Section:
@@ -23,6 +24,7 @@ class Section:
         self.completer_finisher_points = 0
         self.team_worker_points = 0
         self.resource_investigator_points = 0
+        self.completed = False
 
     def __str__(self):
         return f"Section {self.number}"
@@ -68,7 +70,6 @@ class Section:
 def quiz_section(section_number):
     with st.expander(f"Section {section_number}"):
         section = Section(section_number)
-        st.write(section)
         total_points = section.allowed_points
 
         total_points = questions_section(section, total_points)
@@ -93,14 +94,26 @@ def points_and_mark_completed(section, section_number, total_points):
                     category: 0 for category in categories_points
                 }
 
+            if "completed_sections" not in st.session_state:
+                st.session_state.completed_sections = []
+
             for category, points in categories_points.items():
                 st.session_state.total_points[category] += points
+
+            st.session_state.completed_sections.append(section_number)
+            section.completed = True
 
             st.write("Accumulated total points:")
             st.write(st.session_state.total_points)
 
 
 def questions_section(section, total_points):
+
+    disable_list = st.session_state.get("completed_sections", [])
+    disabled_setting = False
+    if section.number in disable_list:
+        disabled_setting = True
+
     for question in section.questions:
         number = st.slider(
             question.text,
@@ -109,6 +122,7 @@ def questions_section(section, total_points):
             value=0,
             step=1,
             key=f"{section}{question.text}",
+            disabled=disabled_setting,
         )
         category = section.return_question_category(question)
         section.add_points_to_category(category, number)
