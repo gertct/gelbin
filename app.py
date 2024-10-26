@@ -4,10 +4,9 @@ import streamlit as st
 
 from questions import QuestionType, questions, Question
 
-if st.button("Start Over"):
-    st.session_state.total_points = {
-        category: 0 for category in QuestionType.__members__
-    }
+st.set_page_config(page_title="Gelbin Test", layout="wide")
+
+if "completed_sections" not in st.session_state:
     st.session_state.completed_sections = []
 
 
@@ -67,6 +66,13 @@ class Section:
         }
 
 
+if st.button("Start Over"):
+    st.session_state.total_points = {
+        category: 0 for category in QuestionType.__members__
+    }
+    st.session_state.completed_sections = []
+
+
 def quiz_section(section_number):
     with st.expander(f"Section {section_number}"):
         section = Section(section_number)
@@ -98,17 +104,12 @@ def points_and_mark_completed(section, section_number, total_points):
                     category: 0 for category in categories_points
                 }
 
-            if "completed_sections" not in st.session_state:
-                st.session_state.completed_sections = []
-
             for category, points in categories_points.items():
                 st.session_state.total_points[category] += points
 
             st.session_state.completed_sections.append(section_number)
             section.completed = True
 
-            st.write("Accumulated total points:")
-            st.write(st.session_state.total_points)
             st.rerun()
 
 
@@ -140,10 +141,17 @@ def disabled_on_complete_setting(section):
     return disabled_setting
 
 
-quiz_section(1)
-quiz_section(2)
-quiz_section(3)
-quiz_section(4)
-quiz_section(5)
-quiz_section(6)
-quiz_section(7)
+quiz_section_col, data_col = st.columns([4, 2])
+with quiz_section_col:
+    quiz_section(1)
+    quiz_section(2)
+    quiz_section(3)
+    quiz_section(4)
+    quiz_section(5)
+    quiz_section(6)
+    quiz_section(7)
+with data_col:
+    st.write("Completed Sections:")
+    completed_sections = st.session_state.completed_sections
+    for section in completed_sections:
+        st.write(f"✅ Section {section} completed")
