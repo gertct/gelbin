@@ -151,7 +151,6 @@ with quiz_section_col:
     quiz_section(6)
     quiz_section(7)
 with data_col:
-    st.write("Completed Sections:")
     completed_sections = st.session_state.completed_sections
     for section in completed_sections:
         st.write(f"✅ Section {section} completed")
