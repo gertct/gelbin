@@ -1,8 +1,9 @@
 from enum import Enum
-from typing import List
 
 import streamlit as st
 from attr import dataclass
+
+from questions import QuestionSection
 
 st.write("Hello world")
 
@@ -19,7 +20,7 @@ you must complete all sections to get your results
 
 """
 Each section will have one question from each category
-There are 8 categories in each section
+There are 7 categories in each section
 The categories are:
 1. Shaper
 2. Plant
@@ -31,30 +32,24 @@ The categories are:
 8. Resource Investigator
 """
 
-class QuestionType(Enum):
-    SHAPER = "Shaper"
-    PLANT = "Plant"
-    COORDINATOR = "Coordinator"
-    MONITOR_EVALUATOR = "Monitor Evaluator"
-    IMPLEMENTER = "Implementer"
-    COMPLETER_FINISHER = "Completer Finisher"
-    TEAM_WORKER = "Team Worker"
-    RESOURCE_INVESTIGATOR = "Resource Investigator"
 
-@dataclass
-class Question:
-    question: str
-    type: QuestionType
+class Section():
+    name: str
+    questions: QuestionSection
+    section_number: int
 
-@dataclass
-class Section:
-    questions: List[Question]
-    max_points: int = 10
+    def __init__(self, name: str, questions: QuestionSection):
+        self.name = name
+        self.questions = questions
+
+    def get_questions(self, section_number: int):
+        return self.questions.questions[section_number]
+    
+
+section1 = Section("Section 1", )
 
 
+    
 
 
-
-
-
-
+    
