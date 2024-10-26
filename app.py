@@ -102,7 +102,7 @@ def points_and_mark_completed(section, section_number, total_points):
 
 def questions_section(section, total_points):
     for question in section.questions:
-        number = st.number_input(
+        number = st.slider(
             question.text,
             min_value=0,
             max_value=10,
