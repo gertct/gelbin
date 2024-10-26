@@ -1,9 +1,10 @@
 from enum import Enum
+import random
+from typing import List
 
 import streamlit as st
 from attr import dataclass
-
-from questions import QuestionSection
+from questions import questions, Question
 
 st.write("Hello world")
 
@@ -32,24 +33,15 @@ The categories are:
 8. Resource Investigator
 """
 
+class Section:
+    def __init__(self, number: int):
+        self.number = number
+        self.questions = []
+        self.points = 10
 
-class Section():
-    name: str
-    questions: QuestionSection
-    section_number: int
-
-    def __init__(self, name: str, questions: QuestionSection):
-        self.name = name
-        self.questions = questions
-
-    def get_questions(self, section_number: int):
-        return self.questions.questions[section_number]
-    
-
-section1 = Section("Section 1", )
+    def get_one_question_from_each_type(index: int = 0) -> List[Question]:
+        question_list = [question_list[index] for question_list in questions.values()]
+        random.shuffle(question_list)
+        return question_list
 
 
-    
-
-
-    
