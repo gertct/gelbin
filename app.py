@@ -78,6 +78,8 @@ def quiz_section(section_number):
 
 
 def points_and_mark_completed(section, section_number, total_points):
+    disabled_setting = disabled_on_complete_setting(section)
+
     st.write(f"Total points left to distribute: {total_points}")
     if total_points > 0:
         st.info("You have not used all your points")
@@ -85,7 +87,9 @@ def points_and_mark_completed(section, section_number, total_points):
         st.error("You have used too many points")
     else:
         st.success("You have used all your points")
-        if st.button("Mark Completed", key=f"section_{section_number}"):
+        if st.button(
+            "Mark Completed", key=f"section_{section_number}", disabled=disabled_setting
+        ):
             st.toast(f"Section {section_number} marked as completed", icon="✅")
             categories_points = section.return_all_categories_points()
 
@@ -105,14 +109,12 @@ def points_and_mark_completed(section, section_number, total_points):
 
             st.write("Accumulated total points:")
             st.write(st.session_state.total_points)
+            st.rerun()
 
 
 def questions_section(section, total_points):
 
-    disable_list = st.session_state.get("completed_sections", [])
-    disabled_setting = False
-    if section.number in disable_list:
-        disabled_setting = True
+    disabled_setting = disabled_on_complete_setting(section)
 
     for question in section.questions:
         number = st.slider(
@@ -128,6 +130,14 @@ def questions_section(section, total_points):
         section.add_points_to_category(category, number)
         total_points -= number
     return total_points
+
+
+def disabled_on_complete_setting(section):
+    disable_list = st.session_state.get("completed_sections", [])
+    disabled_setting = False
+    if section.number in disable_list:
+        disabled_setting = True
+    return disabled_setting
 
 
 quiz_section(1)
