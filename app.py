@@ -71,40 +71,49 @@ def quiz_section(section_number):
         st.write(section)
         total_points = section.allowed_points
 
-        for question in section.questions:
-            number = st.number_input(
-                question.text,
-                min_value=0,
-                max_value=10,
-                value=0,
-                step=1,
-                key=f"{section}{question.text}",
-            )
-            category = section.return_question_category(question)
-            section.add_points_to_category(category, number)
-            total_points -= number
+        total_points = questions_section(section, total_points)
 
-        st.write(f"Total points left to distribute: {total_points}")
-        if total_points > 0:
-            st.info("You have not used all your points")
-        elif total_points < 0:
-            st.error("You have used too many points")
-        else:
-            st.success("You have used all your points")
-            if st.button("Mark Completed", key=f"section_{section_number}"):
-                st.toast(f"Section {section_number} marked as completed", icon="✅")
-                categories_points = section.return_all_categories_points()
+        points_and_mark_completed(section, section_number, total_points)
 
-                if "total_points" not in st.session_state:
-                    st.session_state.total_points = {
-                        category: 0 for category in categories_points
-                    }
 
-                for category, points in categories_points.items():
-                    st.session_state.total_points[category] += points
+def points_and_mark_completed(section, section_number, total_points):
+    st.write(f"Total points left to distribute: {total_points}")
+    if total_points > 0:
+        st.info("You have not used all your points")
+    elif total_points < 0:
+        st.error("You have used too many points")
+    else:
+        st.success("You have used all your points")
+        if st.button("Mark Completed", key=f"section_{section_number}"):
+            st.toast(f"Section {section_number} marked as completed", icon="✅")
+            categories_points = section.return_all_categories_points()
 
-                st.write("Accumulated total points:")
-                st.write(st.session_state.total_points)
+            if "total_points" not in st.session_state:
+                st.session_state.total_points = {
+                    category: 0 for category in categories_points
+                }
+
+            for category, points in categories_points.items():
+                st.session_state.total_points[category] += points
+
+            st.write("Accumulated total points:")
+            st.write(st.session_state.total_points)
+
+
+def questions_section(section, total_points):
+    for question in section.questions:
+        number = st.number_input(
+            question.text,
+            min_value=0,
+            max_value=10,
+            value=0,
+            step=1,
+            key=f"{section}{question.text}",
+        )
+        category = section.return_question_category(question)
+        section.add_points_to_category(category, number)
+        total_points -= number
+    return total_points
 
 
 quiz_section(1)
