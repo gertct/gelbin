@@ -36,12 +36,22 @@ The categories are:
 class Section:
     def __init__(self, number: int):
         self.number = number
-        self.questions = []
+        self.questions = self.get_one_question_from_each_type()
         self.points = 10
+    
+    def __str__(self):
+        return f"Section {self.number}"
 
-    def get_one_question_from_each_type(index: int = 0) -> List[Question]:
+    def get_one_question_from_each_type(self, index: int = 0) -> List[Question]:
         question_list = [question_list[index] for question_list in questions.values()]
         random.shuffle(question_list)
         return question_list
+    
+    def remove_points(self, points: int):
+        self.points -= points
+    
+section_1 = Section(1)
+
+st.write(section_1.questions, section_1.points, section_1)
 
 
