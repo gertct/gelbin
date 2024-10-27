@@ -95,7 +95,7 @@ def quiz_section(section_number, expanded=False):
     with st.expander(f"Section {section_number}", expanded=expanded):
         st.header(f"Section {section_number}", anchor=f"{section_number}")
         total_points = section.allowed_points
-        
+
         section_points = questions_section(section, total_points)
 
         points_and_mark_completed(section, section_number, section_points)
@@ -112,7 +112,11 @@ def points_and_mark_completed(section, section_number, total_points):
         return st.error("You've checked too many boxes! 3 is the max.")
     else:
         if st.button(
-            f"Mark Section {section_number} Completed", key=f"section_{section_number}", disabled=disabled_setting, use_container_width=True, type="primary"
+            f"Mark Section {section_number} Completed",
+            key=f"section_{section_number}",
+            disabled=disabled_setting,
+            use_container_width=True,
+            type="primary",
         ):
             categories_points = section.return_all_categories_points()
 
@@ -130,7 +134,8 @@ def points_and_mark_completed(section, section_number, total_points):
 
 
 def questions_section(section, total_points):
-    st.markdown("""
+    st.markdown(
+        """
         <style>
         .vertically-centered {
             margin-top: 37px;  
@@ -139,25 +144,32 @@ def questions_section(section, total_points):
             margin-top: 29px;   
         }
         </style>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     disabled_setting = disabled_on_complete_setting(section)
 
     checked_questions = []
     for question in section.questions:
         checkbox_col, question_col, points_col = st.columns([0.03, 0.7, 0.2])
-        
+
         with checkbox_col:
-            checked = st.checkbox("", key=f"checkbox_{section}{question.text}", disabled=disabled_setting)
+            checked = st.checkbox(
+                "", key=f"checkbox_{section}{question.text}", disabled=disabled_setting
+            )
             if checked:
                 checked_questions.append(question)
 
         with question_col:
-            st.markdown(f'<p class="vertically-centered">{question.text}</p>', unsafe_allow_html=True)
-        
+            st.markdown(
+                f'<p class="vertically-centered">{question.text}</p>',
+                unsafe_allow_html=True,
+            )
+
         with points_col:
             number = st.number_input(
-                "", 
+                "",
                 min_value=0,
                 max_value=10,
                 value=0,
@@ -165,24 +177,23 @@ def questions_section(section, total_points):
                 key=f"{section}{question.text}",
                 disabled=disabled_setting or not checked,
             )
-        
+
         category = section.return_question_category(question)
         section.add_points_to_category(category, number)
         total_points -= number
-    
+
     if len(checked_questions) < 3:
-        st.warning("First, select between 1 to 3 sentences which most apply to you. Then distribute your points.")
+        st.warning(
+            "First, select between 1 to 3 sentences which most apply to you. Then distribute your points."
+        )
 
     if len(checked_questions) > 3:
         return False
-    
+
     if total_points != 0:
         st.success(f"Total points left to distribute: {total_points}")
 
     return total_points
-
-
-
 
 
 def disabled_on_complete_setting(section):
@@ -216,19 +227,22 @@ def show_top_roles(top_roles, role_details):
     st.header("Your Top Roles and Their Points")
     for role, points in top_roles:
         st.subheader(f"{role}: {points} points")
-        
+
         role_info = role_details[role]
-        
+
         st.markdown(f"**Summary:** {role_info['summary']}")
-        
+
         with st.expander("Detailed Information"):
             st.markdown(f"**Characteristics:** {role_info['characteristics']}")
-            st.markdown(f"**Detailed Characteristics:** {role_info['detailed_characteristics']}")
+            st.markdown(
+                f"**Detailed Characteristics:** {role_info['detailed_characteristics']}"
+            )
             st.markdown(f"**Function:** {role_info['function']}")
             st.markdown(f"**Strengths:** {role_info['strengths']}")
             st.markdown(f"**Weaknesses:** {role_info['weaknesses']}")
-        
+
         st.divider()
+
 
 with data_col:
     float_parent()
@@ -240,21 +254,14 @@ with data_col:
         st.write("All sections completed 🎉")
 
         sorted_roles = sorted(
-            st.session_state.total_points.items(),
-            key=lambda x: x[1],
-            reverse=True
+            st.session_state.total_points.items(), key=lambda x: x[1], reverse=True
         )
 
         top_two_points = sorted_roles[0][1], sorted_roles[1][1]
 
         top_roles = [
-            (role, points) for role, points in sorted_roles
-            if points in top_two_points
+            (role, points) for role, points in sorted_roles if points in top_two_points
         ]
 
         if st.button("View Results"):
             show_top_roles(top_roles, role_details)
-
-
-
-
