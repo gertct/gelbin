@@ -1,3 +1,4 @@
+import random
 from typing import Dict, List
 
 import streamlit as st
@@ -34,6 +35,7 @@ class Section:
 
     def get_one_question_from_each_type(self, index: int = 0) -> List[Question]:
         question_list = [question_list[index] for question_list in questions.values()]
+        random.shuffle(question_list)
         return question_list
 
     def return_question_category(self, question: Question) -> QuestionType:
@@ -94,9 +96,9 @@ def quiz_section(section_number, expanded=False):
         st.header(f"Section {section_number}", anchor=f"{section_number}")
         total_points = section.allowed_points
 
-        total_points = questions_section(section, total_points)
+        section_points = questions_section(section, total_points)
 
-        points_and_mark_completed(section, section_number, total_points)
+        points_and_mark_completed(section, section_number, section_points)
 
 
 def points_and_mark_completed(section, section_number, total_points):
