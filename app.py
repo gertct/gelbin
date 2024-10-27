@@ -166,9 +166,12 @@ with quiz_section_col:
     min_uncompleted_section = min(uncompleted_sections, default=None)
     for section in range(1, 8):
         quiz_section(section, expanded=section == min_uncompleted_section)
-    
+
     if min_uncompleted_section:
         scroll_to(min_uncompleted_section)
+
+    if not uncompleted_sections:
+        st.balloons()
 
 with data_col:
     float_parent()
