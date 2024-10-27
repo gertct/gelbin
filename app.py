@@ -5,7 +5,7 @@ from streamlit.components.v1 import components
 from streamlit_float import float_parent, float_init
 
 from questions import QuestionType, questions, Question
-
+from role_details import role_details
 st.set_page_config(page_title="Gelbin Test", layout="wide")
 
 if "completed_sections" not in st.session_state:
@@ -209,6 +209,30 @@ with quiz_section_col:
     if not uncompleted_sections:
         st.balloons()
 
+
+
+
+
+
+@st.dialog("Your Top Roles")
+def show_top_roles(top_roles, role_details):
+    st.header("Your Top Roles and Their Points")
+    for role, points in top_roles:
+        st.subheader(f"{role}: {points} points")
+        
+        role_info = role_details[role]
+        
+        st.markdown(f"**Summary:** {role_info['summary']}")
+        
+        with st.expander("Detailed Information"):
+            st.markdown(f"**Characteristics:** {role_info['characteristics']}")
+            st.markdown(f"**Detailed Characteristics:** {role_info['detailed_characteristics']}")
+            st.markdown(f"**Function:** {role_info['function']}")
+            st.markdown(f"**Strengths:** {role_info['strengths']}")
+            st.markdown(f"**Weaknesses:** {role_info['weaknesses']}")
+        
+        st.divider()
+
 with data_col:
     float_parent()
     completed_sections = st.session_state.completed_sections
@@ -231,6 +255,9 @@ with data_col:
             if points in top_two_points
         ]
 
-        st.write("Your top roles and their points:")
-        for role, points in top_roles:
-            st.write(f"{role}: {points}")
+        if st.button("View Results"):
+            show_top_roles(top_roles, role_details)
+
+
+
+
