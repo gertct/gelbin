@@ -1,6 +1,7 @@
 from typing import Dict, List
 
 import streamlit as st
+from streamlit.components.v1 import components
 from streamlit_float import float_parent, float_init
 
 from questions import QuestionType, questions, Question
@@ -76,10 +77,21 @@ if st.button("Start Over"):
     st.session_state.completed_sections = []
 
 
+def scroll_to(element_id):
+    st.components.v1.html(
+        f"""
+        <script>
+            var element = window.parent.document.getElementById("{element_id}");
+            element.scrollIntoView({{behavior: 'smooth'}});
+        </script>
+    """.encode()
+    )
+
+
 def quiz_section(section_number, expanded=False):
     section = Section(section_number)
     with st.expander(f"Section {section_number}", expanded=expanded):
-
+        st.header(f"Section {section_number}", anchor=f"{section_number}")
         total_points = section.allowed_points
 
         total_points = questions_section(section, total_points)
@@ -113,7 +125,6 @@ def points_and_mark_completed(section, section_number, total_points):
 
             st.session_state.completed_sections.append(section_number)
             section.completed = True
-
             st.rerun()
 
 
@@ -155,6 +166,9 @@ with quiz_section_col:
     min_uncompleted_section = min(uncompleted_sections, default=None)
     for section in range(1, 8):
         quiz_section(section, expanded=section == min_uncompleted_section)
+    
+    if min_uncompleted_section:
+        scroll_to(min_uncompleted_section)
 
 with data_col:
     float_parent()
