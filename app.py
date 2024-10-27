@@ -104,9 +104,11 @@ def points_and_mark_completed(section, section_number, total_points):
     disabled_setting = disabled_on_complete_setting(section)
 
     if total_points > 0:
-        st.info("You have not used all your points")
+        st.info("Distribute all your points to mark section as completed.")
     elif total_points < 0:
         st.error("You have used too many points")
+    elif total_points is False:
+        return st.error("You've checked too many boxes! 3 is the max.")
     else:
         if st.button(
             f"Mark Section {section_number} Completed", key=f"section_{section_number}", disabled=disabled_setting, use_container_width=True, type="primary"
@@ -167,8 +169,11 @@ def questions_section(section, total_points):
         section.add_points_to_category(category, number)
         total_points -= number
     
-    if len(checked_questions) < 1 or len(checked_questions) > 3:
+    if len(checked_questions) < 3:
         st.warning("First, select between 1 to 3 sentences which most apply to you. Then distribute your points.")
+
+    if len(checked_questions) > 3:
+        return False
     
     if total_points != 0:
         st.success(f"Total points left to distribute: {total_points}")
