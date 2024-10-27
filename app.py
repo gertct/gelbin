@@ -128,19 +128,34 @@ def points_and_mark_completed(section, section_number, total_points):
 
 def questions_section(section, total_points):
 
+    st.markdown("""
+        <style>
+        .vertically-centered {
+            margin-top: 37px;  /* Adjust this value as needed */
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+
     disabled_setting = disabled_on_complete_setting(section)
 
     for question in section.questions:
-        number = st.number_input(
-            question.text,
+        question_col, points_col = st.columns([0.8, 0.2])
+        
+        with question_col:
+            st.markdown(f'<p class="vertically-centered">{question.text}</p>', unsafe_allow_html=True)
+        
+        with points_col:
+            number = st.number_input(
+            "", 
             min_value=0,
             max_value=10,
             value=0,
             step=1,
-
             key=f"{section}{question.text}",
             disabled=disabled_setting,
         )
+        
         category = section.return_question_category(question)
         section.add_points_to_category(category, number)
         total_points -= number
