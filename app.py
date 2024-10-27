@@ -218,15 +218,19 @@ with data_col:
         st.divider()
         st.write("All sections completed 🎉")
 
-        sorted_points = sorted(st.session_state.total_points.values(), reverse=True)
-        top_two_points = sorted_points[:2]
+        sorted_roles = sorted(
+            st.session_state.total_points.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )
+
+        top_two_points = sorted_roles[0][1], sorted_roles[1][1]
 
         top_roles = [
-            role
-            for role, points in st.session_state.total_points.items()
+            (role, points) for role, points in sorted_roles
             if points in top_two_points
         ]
 
-        st.write("Your tops roles and their points:")
-        for role in top_roles:
-            st.write(f"{role}: {st.session_state.total_points[role]}")
+        st.write("Your top roles and their points:")
+        for role, points in top_roles:
+            st.write(f"{role}: {points}")
