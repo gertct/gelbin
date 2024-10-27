@@ -6,6 +6,7 @@ from streamlit_float import float_parent, float_init
 
 from questions import QuestionType, questions, Question
 from role_details import role_details
+
 st.set_page_config(page_title="Gelbin Test", layout="wide")
 
 if "completed_sections" not in st.session_state:
@@ -208,10 +209,6 @@ with quiz_section_col:
 
     if not uncompleted_sections:
         st.balloons()
-
-
-
-
 
 
 @st.dialog("Your Top Roles")
