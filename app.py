@@ -127,43 +127,56 @@ def points_and_mark_completed(section, section_number, total_points):
 
 
 def questions_section(section, total_points):
-
     st.markdown("""
         <style>
         .vertically-centered {
-            margin-top: 37px;  /* Adjust this value as needed */
+            margin-top: 37px;  
+        }
+        .stCheckbox {
+            margin-top: 29px;   
         }
         </style>
     """, unsafe_allow_html=True)
 
-
     disabled_setting = disabled_on_complete_setting(section)
 
+    checked_questions = []
     for question in section.questions:
-        question_col, points_col = st.columns([0.8, 0.2])
+        checkbox_col, question_col, points_col = st.columns([0.03, 0.7, 0.2])
         
+        with checkbox_col:
+            checked = st.checkbox("", key=f"checkbox_{section}{question.text}", disabled=disabled_setting)
+            if checked:
+                checked_questions.append(question)
+
         with question_col:
             st.markdown(f'<p class="vertically-centered">{question.text}</p>', unsafe_allow_html=True)
         
         with points_col:
             number = st.number_input(
-            "", 
-            min_value=0,
-            max_value=10,
-            value=0,
-            step=1,
-            key=f"{section}{question.text}",
-            disabled=disabled_setting,
-        )
+                "", 
+                min_value=0,
+                max_value=10,
+                value=0,
+                step=1,
+                key=f"{section}{question.text}",
+                disabled=disabled_setting or not checked,
+            )
         
         category = section.return_question_category(question)
         section.add_points_to_category(category, number)
         total_points -= number
     
+    if len(checked_questions) < 1 or len(checked_questions) > 3:
+        st.warning("First, select between 1 to 3 sentences which most apply to you. Then distribute your points.")
+    
     if total_points != 0:
         st.success(f"Total points left to distribute: {total_points}")
 
     return total_points
+
+
+
 
 
 def disabled_on_complete_setting(section):
