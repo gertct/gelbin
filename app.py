@@ -3,6 +3,7 @@ from typing import Dict, List
 import streamlit as st
 from streamlit.components.v1 import components
 from streamlit_float import float_parent, float_init
+from st_copy_to_clipboard import st_copy_to_clipboard
 
 from questions import QuestionType, questions, Question
 from role_details import role_details
@@ -14,6 +15,16 @@ if "completed_sections" not in st.session_state:
 
 float_init()
 
+role_display_names = {
+    "SHAPER": "Shaper 🔨",
+    "PLANT": "Plant 🌱",
+    "COORDINATOR": "Coordinator 🎯",
+    "MONITOR_EVALUATOR": "Monitor Evaluator 🔍",
+    "IMPLEMENTER": "Implementer 🛠️",
+    "COMPLETER_FINISHER": "Completer Finisher 🏁",
+    "TEAM_WORKER": "Team Worker 🤝",
+    "RESOURCE_INVESTIGATOR": "Resource Investigator 🕵️",
+}
 
 class Section:
     def __init__(self, number: int):
@@ -226,7 +237,8 @@ with quiz_section_col:
 def show_top_roles(top_roles, role_details):
     st.header("Your Top Roles and Their Points")
     for role, points in top_roles:
-        st.subheader(f"{role}: {points} points")
+        pretty_role = role_display_names.get(role, role)
+        st.subheader(f"{pretty_role}: {points} points")
 
         role_info = role_details[role]
 
@@ -240,6 +252,19 @@ def show_top_roles(top_roles, role_details):
             st.markdown(f"**Function:** {role_info['function']}")
             st.markdown(f"**Strengths:** {role_info['strengths']}")
             st.markdown(f"**Weaknesses:** {role_info['weaknesses']}")
+
+        role_text = f"""
+Role: {pretty_role}
+Points: {points}
+Summary: {role_info['summary']}
+Characteristics: {role_info['characteristics']}
+Detailed Characteristics: {role_info['detailed_characteristics']}
+Function: {role_info['function']}
+Strengths: {role_info['strengths']}
+Weaknesses: {role_info['weaknesses']}
+        """
+
+        st_copy_to_clipboard(role_text, "Copy Role Information")
 
         st.divider()
 

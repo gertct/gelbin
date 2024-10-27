@@ -1006,6 +1006,21 @@ files = [
 ]
 
 [[package]]
+name = "st-copy-to-clipboard"
+version = "0.1.6"
+description = "Streamlit component that allows you to copy text to the clipboard."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "st-copy-to-clipboard-0.1.6.tar.gz", hash = "sha256:76634e74384335f64d80469bfe2ca31d15806a140cb89490321764b235acaae6"},
+    {file = "st_copy_to_clipboard-0.1.6-py3-none-any.whl", hash = "sha256:2a3eed0beb550548b04ac8a4e12c0fb09726654a15c302acb035454948b01cd1"},
+]
+
+[package.dependencies]
+jinja2 = "*"
+streamlit = ">=1.2"
+
+[[package]]
 name = "streamlit"
 version = "1.39.0"
 description = "A faster way to build and share data apps"
@@ -1184,4 +1199,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "c8a87094abab48b2fc3343c1eeed89ffb6322ae0e81262ffe9d36faa18db8cee"
+content-hash = "790c1f44729db0a968607adf4090479d7380d847016c7376ea7f44d043f7f30c"
