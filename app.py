@@ -1,4 +1,3 @@
-import random
 from typing import Dict, List
 
 import streamlit as st
@@ -35,7 +34,6 @@ class Section:
 
     def get_one_question_from_each_type(self, index: int = 0) -> List[Question]:
         question_list = [question_list[index] for question_list in questions.values()]
-        random.shuffle(question_list)
         return question_list
 
     def return_question_category(self, question: Question) -> QuestionType:
@@ -77,6 +75,7 @@ if st.button("Start Over"):
         category: 0 for category in QuestionType.__members__
     }
     st.session_state.completed_sections = []
+    st.rerun()
 
 
 def scroll_to(element_id):
@@ -95,7 +94,7 @@ def quiz_section(section_number, expanded=False):
     with st.expander(f"Section {section_number}", expanded=expanded):
         st.header(f"Section {section_number}", anchor=f"{section_number}")
         total_points = section.allowed_points
-
+        
         section_points = questions_section(section, total_points)
 
         points_and_mark_completed(section, section_number, section_points)
@@ -104,17 +103,14 @@ def quiz_section(section_number, expanded=False):
 def points_and_mark_completed(section, section_number, total_points):
     disabled_setting = disabled_on_complete_setting(section)
 
-    st.write(f"Total points left to distribute: {total_points}")
     if total_points > 0:
         st.info("You have not used all your points")
     elif total_points < 0:
         st.error("You have used too many points")
     else:
-        st.success("You have used all your points")
         if st.button(
-            "Mark Completed", key=f"section_{section_number}", disabled=disabled_setting
+            f"Mark Section {section_number} Completed", key=f"section_{section_number}", disabled=disabled_setting, use_container_width=True, type="primary"
         ):
-            st.toast(f"Section {section_number} marked as completed", icon="✅")
             categories_points = section.return_all_categories_points()
 
             if "total_points" not in st.session_state:
@@ -135,18 +131,23 @@ def questions_section(section, total_points):
     disabled_setting = disabled_on_complete_setting(section)
 
     for question in section.questions:
-        number = st.slider(
+        number = st.number_input(
             question.text,
             min_value=0,
             max_value=10,
             value=0,
             step=1,
+
             key=f"{section}{question.text}",
             disabled=disabled_setting,
         )
         category = section.return_question_category(question)
         section.add_points_to_category(category, number)
         total_points -= number
+    
+    if total_points != 0:
+        st.success(f"Total points left to distribute: {total_points}")
+
     return total_points
 
 
@@ -182,9 +183,8 @@ with data_col:
         st.write(f"✅ Section {section} completed")
     if len(completed_sections) == 7:
         st.divider()
-        st.write("All sections completed")
+        st.write("All sections completed 🎉")
 
-        st.write("Total points:")
         sorted_points = sorted(st.session_state.total_points.values(), reverse=True)
         top_two_points = sorted_points[:2]
 
