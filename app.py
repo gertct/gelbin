@@ -2,7 +2,6 @@ from typing import Dict, List
 
 import streamlit as st
 from st_copy_to_clipboard import st_copy_to_clipboard
-from streamlit.components.v1 import components
 from streamlit_float import float_parent, float_init
 
 from questions import QuestionType, questions, Question
@@ -43,9 +42,6 @@ class Section:
         self.resource_investigator_points = 0
         self.specialist_points = 0
         self.completed = False
-
-    def __str__(self):
-        return f"Section {self.number}"
 
     def get_one_question_from_each_type(self, index: int = 0) -> List[Question]:
         question_list = [question_list[index] for question_list in questions.values()]
