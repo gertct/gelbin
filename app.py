@@ -288,5 +288,5 @@ with data_col:
             (role, points) for role, points in sorted_roles if points in top_two_points
         ]
 
-        if st.button("View Results"):
+        if st.button("View Results", type="primary"):
             show_top_roles(top_roles, role_details)
