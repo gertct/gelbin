@@ -1,9 +1,9 @@
 from typing import Dict, List
 
 import streamlit as st
+from st_copy_to_clipboard import st_copy_to_clipboard
 from streamlit.components.v1 import components
 from streamlit_float import float_parent, float_init
-from st_copy_to_clipboard import st_copy_to_clipboard
 
 from questions import QuestionType, questions, Question
 from role_details import role_details
@@ -25,6 +25,7 @@ role_display_names = {
     "TEAM_WORKER": "Team Worker 🤝",
     "RESOURCE_INVESTIGATOR": "Resource Investigator 🕵️",
 }
+
 
 class Section:
     def __init__(self, number: int):
@@ -82,12 +83,36 @@ class Section:
         }
 
 
-if st.button("Start Over"):
-    st.session_state.total_points = {
-        category: 0 for category in QuestionType.__members__
-    }
-    st.session_state.completed_sections = []
-    st.rerun()
+@st.dialog("Instructions", width="large")
+def show_instructions():
+    st.image("belbin_roles.png", use_column_width=True)
+    st.write(
+        """
+        Welcome to the Belbin Test! 
+        
+
+        ## Instructions
+        1. Go through each section and select between 1-3 sentences that most apply to you.
+        2. Distribute your 10 points among the selected sentences, based on preference.
+        3. Mark the section as completed.
+        4. Once all sections are completed, click on 'View Results' to see your top roles.
+        
+        This version of the Belbin test has been taken from "Teambuilding" by Alistair Fraser and Suzanne Neville.
+        """
+    )
+
+
+start_col, _, instructions_col = st.columns([0.1, 0.8, 0.1])
+with start_col:
+    if st.button("Start Over"):
+        st.session_state.total_points = {
+            category: 0 for category in QuestionType.__members__
+        }
+        st.session_state.completed_sections = []
+        st.rerun()
+with instructions_col:
+    if st.button("Instructions"):
+        show_instructions()
 
 
 def scroll_to(element_id):
