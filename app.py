@@ -197,7 +197,10 @@ def questions_section(section, total_points):
 
         with checkbox_col:
             checked = st.checkbox(
-                "checkbox", key=f"checkbox_{section}{question.text}", disabled=disabled_setting, label_visibility="collapsed"
+                "checkbox",
+                key=f"checkbox_{section}{question.text}",
+                disabled=disabled_setting,
+                label_visibility="collapsed",
             )
             if checked:
                 checked_questions.append(question)
