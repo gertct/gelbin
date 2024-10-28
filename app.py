@@ -24,13 +24,14 @@ role_display_names = {
     "COMPLETER_FINISHER": "Completer Finisher 🏁",
     "TEAM_WORKER": "Team Worker 🤝",
     "RESOURCE_INVESTIGATOR": "Resource Investigator 🕵️",
+    "SPECIALIST": "Specialist 📚",
 }
 
 
 class Section:
     def __init__(self, number: int):
         self.number = number
-        self.questions = self.get_one_question_from_each_type()
+        self.questions = self.get_one_question_from_each_type(self.number - 1)
         self.allowed_points = 10
         self.shaper_points = 0
         self.plant_points = 0
@@ -40,6 +41,7 @@ class Section:
         self.completer_finisher_points = 0
         self.team_worker_points = 0
         self.resource_investigator_points = 0
+        self.specialist_points = 0
         self.completed = False
 
     def __str__(self):
@@ -69,6 +71,8 @@ class Section:
             self.team_worker_points += points
         elif category == QuestionType.RESOURCE_INVESTIGATOR:
             self.resource_investigator_points += points
+        elif category == QuestionType.SPECIALIST:
+            self.specialist_points += points
 
     def return_all_categories_points(self) -> Dict[str, int]:
         return {
@@ -80,6 +84,7 @@ class Section:
             QuestionType.COMPLETER_FINISHER.name: self.completer_finisher_points,
             QuestionType.TEAM_WORKER.name: self.team_worker_points,
             QuestionType.RESOURCE_INVESTIGATOR.name: self.resource_investigator_points,
+            QuestionType.SPECIALIST.name: self.specialist_points,
         }
 
 
@@ -102,7 +107,7 @@ def show_instructions():
     )
 
 
-start_col, _, instructions_col = st.columns([0.1, 0.8, 0.1])
+start_col, _, instructions_col, _ = st.columns([1, 5, 1, 3])
 with start_col:
     if st.button("Start Over"):
         st.session_state.total_points = {
@@ -127,8 +132,8 @@ def scroll_to(element_id):
 
 
 def quiz_section(section_number, expanded=False):
-    section = Section(section_number)
     with st.expander(f"Section {section_number}", expanded=expanded):
+        section = Section(section_number)
         st.header(f"Section {section_number}", anchor=f"{section_number}")
         total_points = section.allowed_points
 
@@ -258,7 +263,7 @@ with quiz_section_col:
         st.balloons()
 
 
-@st.dialog("Your Top Roles")
+@st.dialog("Your Top Roles", width="large")
 def show_top_roles(top_roles, role_details):
     st.header("Your Top Roles and Their Points")
     for role, points in top_roles:
@@ -290,8 +295,6 @@ Weaknesses: {role_info['weaknesses']}
         """
 
         st_copy_to_clipboard(role_text, "Copy Role Information")
-
-        st.divider()
 
 
 with data_col:

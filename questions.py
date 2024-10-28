@@ -12,6 +12,7 @@ class QuestionType(Enum):
     COMPLETER_FINISHER = "Completer Finisher"
     TEAM_WORKER = "Team Worker"
     RESOURCE_INVESTIGATOR = "Resource Investigator"
+    SPECIALIST = "Specialist"
 
 @dataclass
 class Question:
@@ -90,6 +91,15 @@ questions = {
         Question("I seem to develop a natural sense of urgency.", QuestionType.COMPLETER_FINISHER),
         Question("I am concerned to finish and perfect current work before I start.", QuestionType.COMPLETER_FINISHER),
         Question("I have an eye for getting the details right.", QuestionType.COMPLETER_FINISHER),
+    ],
+    QuestionType.SPECIALIST: [
+        Question("I maintain my professional expertise by continuous study.", QuestionType.SPECIALIST),
+        Question("I have specific technical skills and knowledge relevant to the team.", QuestionType.SPECIALIST),
+        Question("I prefer to focus on my own specialist area rather than seeing the bigger picture.", QuestionType.SPECIALIST),
+        Question("I defend my specialist area when challenged by others.", QuestionType.SPECIALIST),
+        Question("I enjoy acquiring expertise in specific technical areas.", QuestionType.SPECIALIST),
+        Question("I prioritize developing depth of knowledge over breadth.", QuestionType.SPECIALIST),
+        Question("I take pride in bringing expert knowledge to the team.", QuestionType.SPECIALIST),
     ],
 }
 

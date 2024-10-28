@@ -61,6 +61,14 @@ role_details = {
         "detailed_characteristics": "Completers have a great capacity for follow-through and attention to detail, and seldom start what they cannot finish. They are motivated by internal anxiety, although outwardly they may appear unruffled.",
         "function": "Completer-Finishers are invaluable where tasks demand close concentration and a high degree of accuracy. They foster a sense of urgency within a team and are good at meeting schedules.",
         "strengths": "A capacity for fulfilling their promises and working to the highest standards.",
-        "weaknesses": "A tendency to worry about small things and a reluctance to 'let go'."
+        "weaknesses": "A tendency to worry about small things and a reluctance to 'let go'." 
+    },
+    "SPECIALIST": {
+        "summary": "Specialists are dedicated individuals who pride themselves on their technical skills and specialized knowledge. They contribute to the team through their focused expertise.",
+        "characteristics": "Professional, dedicated, self-starting, single-minded.",
+        "detailed_characteristics": "Specialists are dedicated to their chosen field, priding themselves on maintaining their professional status and acquiring technical skills. They commit deeply to their specialty and usually prefer to operate within that defined area.",
+        "function": "Specialists provide the rare skills and knowledge upon which the team's service or product is based. As experts in their field, they play an indispensable role in certain teams.",
+        "strengths": "Provides knowledge and technical skills in rare supply, delivers on their specific area of expertise.",
+        "weaknesses": "Contributes only on a narrow front, dwells on technicalities, overlooks the bigger picture."
     },
 }
