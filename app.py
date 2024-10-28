@@ -197,7 +197,7 @@ def questions_section(section, total_points):
 
         with checkbox_col:
             checked = st.checkbox(
-                "", key=f"checkbox_{section}{question.text}", disabled=disabled_setting
+                "checkbox", key=f"checkbox_{section}{question.text}", disabled=disabled_setting, label_visibility="collapsed"
             )
             if checked:
                 checked_questions.append(question)
@@ -210,13 +210,14 @@ def questions_section(section, total_points):
 
         with points_col:
             number = st.number_input(
-                "",
+                "number_input",
                 min_value=0,
                 max_value=10,
                 value=0,
                 step=1,
                 key=f"{section}{question.text}",
                 disabled=disabled_setting or not checked,
+                label_visibility="collapsed",
             )
 
         category = section.return_question_category(question)
